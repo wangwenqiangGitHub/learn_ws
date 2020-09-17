@@ -1,0 +1,10 @@
+version: '2'
+services:
+    redis:
+        image: daocloud.io/library/redis:5.0.7
+        restart: always
+        container_name: redis
+        environment:
+            - TZ=Asia/Shanghai
+        ports:
+            - 6379:6379
