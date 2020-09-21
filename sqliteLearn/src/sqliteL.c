@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sqlite3.h>
 
 int print(void * arg, int colum, char** value, char** name)
@@ -39,7 +40,7 @@ int main()
         printf("请输入学号，姓名，年龄\n");
         scanf("%d%s%d", &id,name,&age);
         sprintf(sql,"insert into student values(%d, %s, %d)",id,name,age);
-        ret = sqlite3_exec(ppdb, sql, NULL, NULL. NULL);
+        ret = sqlite3_exec(ppdb, sql, NULL, NULL, NULL);
         if(ret != SQLITE_OK)
         {
             printf("sqlite3_exec:%s\n",sqlite3_errmsg(ppdb));
