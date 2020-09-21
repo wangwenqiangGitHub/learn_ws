@@ -1,0 +1,4 @@
+set noswapfile
+"禁用交换文件，发生崩溃时，会产生一个.swap结尾的文件用于文件恢复
+set number
+set ts=4
