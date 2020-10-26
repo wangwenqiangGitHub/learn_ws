@@ -17,7 +17,7 @@ void read_cb (struct bufferevent *bev, void *ctx)
 {
     char buf[128] = {0};
     size_t ret = bufferevent_read(bev, buf, sizeof buf);
-    int fd = *(int *)ctx;
+    evutil_socket_t fd = bufferevent_getfd(bev);
     if(ret < 0)
     {
         printf("read null");
@@ -32,7 +32,8 @@ void event_cb (struct bufferevent *bev, short what, void *ctx)
 {
     if(what & BEV_EVENT_EOF)
     {
-        printf("客户端%d",*(int*)ctx);
+        evutil_socket_t fd = bufferevent_getfd(bev);
+        printf("客户端%d",fd);
         bufferevent_free(bev);//释放bufferevent对象
     }
 }
@@ -50,7 +51,7 @@ void listener_cb (struct evconnlistener * listener, evutil_socket_t fd,
     }
     //给bufferevnt设置回调函数
     //bufferevent对象，读事件回调函数，写事件回调函数，其他事件回调函数，参数
-    bufferevent_setcb(bev, read_cb, NULL, event_cb,(void *)&fd);
+    bufferevent_setcb(bev, read_cb, NULL, event_cb,NULL);
     //使能bufferevent
     bufferevent_enable(bev,EV_READ);
 }
@@ -71,7 +72,7 @@ int main(int argc, char ** argv)
     struct sockaddr_in server_addr;
     memset(&server_addr, 0, sizeof server_addr);
     server_addr.sin_family = AF_INET;
-    server_addr.sin_port = 8000;
+    server_addr.sin_port = htons(8000);
     server_addr.sin_addr.s_addr = inet_addr("127.0.0.1");
     //创建socket , bind , listen, accept, connection
     //创建监听对象，在指定的地址上监听接下来的TCP连接
