@@ -8,14 +8,14 @@ gcc -c sumfloat.c subfloat.c
 ar crv libafile.a sumfloat.o subfloat.o
 ```  
 >知识拓展：
-gcc是Gnu的c编译器，gcc在执行编译工作的时候，总共需要4步：
-1、预处理，生成.i的文件[预处理器cpp]
-2、将预处理后的文件转换成汇编语言，生成文件.s[编译器egcs]
-3、有汇编变为目标代码（机器代码）生成.o的文件[汇编器as]
-4、连接目标代码，生成可执行程序[链接器ld]
+<br>gcc是Gnu的c编译器，gcc在执行编译工作的时候，总共需要4步：
+<br>1、预处理，生成.i的文件[预处理器cpp]
+<br>2、将预处理后的文件转换成汇编语言，生成文件.s[编译器egcs]
+<br>3、有汇编变为目标代码（机器代码）生成.o的文件[汇编器as]
+<br>4、连接目标代码，生成可执行程序[链接器ld]
 其中参数详解如下：
--c:只编译，不链接成可执行文件，生成.o文件
--o:链接生成可执行文件，默认是生成a.out
+<br>-c:只编译，不链接成可执行文件，生成.o文件
+<br>-o:链接生成可执行文件，默认是生成a.out
 
 > 知识拓展：
 ar命令可以用来创建修改库，也可以从库中提出单个模块。一般多用来生成静态库。
@@ -30,20 +30,20 @@ sudo cp libsofile.so /usr/lib
 gcc -shared *.o -o libsofile.so
 ```
 >知识拓展：
-参数详解：
+<br>参数详解：
 -shared：生成共享库
 *.o：将当前文件目录下的.o文件批操作
 这里提供一下解决报错的
-方法二
+<br>方法二
 gcc -o test main1.c -L. -lname
 其中，
--L：表示在当前目录下，可自行定义路径path，即使用-lpath 即可。
-－lname：name:即对应库文件的名字(除开lib)，即若使用libafile.a，则name 为afile；若要使用libsofile.so，则name 为sofile。
+<br>-L：表示在当前目录下，可自行定义路径path，即使用<br>-lpath 即可。
+<br>－lname：name:即对应库文件的名字(除开lib)，即若使<br>用libafile.a，则name 为afile；若要使用libsofile.so，则name 为sofile。
 >
 # 动态库链接失败问题
->链接器ld默认的目录是/lib和/usr/lib，如果放在其他路径也可以，需要让ld知道库文件在哪里。
+>链接器ld默认的目录是/lib和/usr/lib，如果放在其他路径也可以，需要让ld知道库文件在哪里。<br>
 方法1：
-export LD_LIBRARY_PATH=/home/kingwq/learn_ws/linuxDotSoDoATest:$LD_LIBRARY_PATH  
+export LD_LIBRARY_PATH=/home/kingwq/learn_ws/linuxDotSoDoATest:$LD_LIBRARY_PATH  <br>
 方法2：
 mv 动态库到 /lib和/usr/lib 以及动态库配置文件/etc/ld.so.conf内所列的目录下
 >
