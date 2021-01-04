@@ -18,11 +18,11 @@ ar crv libafile.a sumfloat.o subfloat.o
 <br>-o:链接生成可执行文件，默认是生成a.out
 
 > 知识拓展：
-ar命令可以用来创建修改库，也可以从库中提出单个模块。一般多用来生成静态库。
-参数详解：
--c：创建一个库。不管库存不存在都将创建
--r：在库中插入模块（替换）
--v：程序执行时显示详细信息
+<br>ar命令可以用来创建修改库，也可以从库中提出单个模块。一般多用来生成静态库。
+<br>参数详解：
+<br>-c：创建一个库。不管库存不存在都将创建
+<br>-r：在库中插入模块（替换）
+<br>-v：程序执行时显示详细信息
 > 
 # 动态库
 ```shell
@@ -31,14 +31,14 @@ gcc -shared *.o -o libsofile.so
 ```
 >知识拓展：
 <br>参数详解：
--shared：生成共享库
+<br>-shared：生成共享库
 *.o：将当前文件目录下的.o文件批操作
 这里提供一下解决报错的
 <br>方法二
-gcc -o test main1.c -L. -lname
+<br>gcc -o test main1.c -L. -lname
 其中，
-<br>-L：表示在当前目录下，可自行定义路径path，即使用<br>-lpath 即可。
-<br>－lname：name:即对应库文件的名字(除开lib)，即若使<br>用libafile.a，则name 为afile；若要使用libsofile.so，则name 为sofile。
+<br>-L：表示在当前目录下，可自行定义路径path，即使用-lpath 即可。
+<br>－lname：name:即对应库文件的名字(除开lib)，即若使用libafile.a，则name 为afile；若要使用libsofile.so，则name 为sofile。
 >
 # 动态库链接失败问题
 >链接器ld默认的目录是/lib和/usr/lib，如果放在其他路径也可以，需要让ld知道库文件在哪里。<br>
