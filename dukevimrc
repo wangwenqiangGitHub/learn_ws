@@ -1,0 +1,237 @@
+"快捷键设置
+filetype plugin on
+set number
+set relativenumber
+"语法高亮。自动识别代码，使用多种颜色表示
+syntax enable
+"支持鼠标
+"set mouse=a
+"按下回车后，下一行的缩进会自动跟上一行的缩进保持一致
+set autoindent
+"按下Tab键后，vim显示的空格数
+set tabstop=4
+"normal模式下，>>增加一级缩进、<<取消一级缩进、==取消全部缩进时，每一级缩进的空格数
+set shiftwidth=4
+"设置文件的代码形式 utf8
+set encoding=utf-8
+set termencoding=utf-8
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf-8,chinese,cp936
+" 自动将Tab转为空格(防止Tab键在不同编辑器缩进不一致导致问题)
+set expandtab
+" Tab转为多少个空格
+set softtabstop=4
+"取消swap文件产生
+set noswapfile
+
+"设置s为返回一行头尾
+noremap <expr>s col(".")==1?"$":"0"
+noremap L $
+noremap H ^
+" next tab
+nnoremap zn gt
+"prev tab
+nnoremap zp gT
+"let g:mapleader=';'
+let g:mapleader=","
+nnoremap <leader>y vawy
+nnoremap <leader>p vawp
+
+nnoremap ; :
+xnoremap ; :
+"跳到最后更改的地方
+"noremap '. `.
+
+set clipboard=unnamed,unnamedplus
+set ignorecase smartcase
+
+set tags=./.tags;,.tags
+
+set cursorline
+
+set updatetime=50
+
+"noremap <expr><space> Test()
+"function! Test()
+"  if col(".") > 10
+"     return "viw"
+" endif
+" return "viW"
+"endfunction
+call plug#begin('~/.vim/plugged')
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'easymotion/vim-easymotion'
+Plug 'preservim/nerdtree'
+Plug 'luochen1990/rainbow'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'skywind3000/asyncrun.vim'
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' }
+Plug 'skywind3000/gutentags_plus'
+Plug 'vim-airline/vim-airline'
+call plug#end()
+
+"set vim-easymotion
+nmap ss <Plug>(easymotion-s2)
+
+"set NEADTTree
+noremap <leader>n   :NERDTree<cr>
+vnoremap <leader>n  :NERDTree<cr>
+map <leader>t :NERDTreeToggle<CR>
+let NEADTTreeShowLineNumbers=1 "显示行号
+let NERDTreeAutoCenter=1
+
+"let g:coc_global_extentions = ['coc-vimlsp']
+"
+"回车自动补全
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+"
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+	let col = col('.') - 1
+	return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+"Use <c-space> to trigger completion.按住ctrl + a空格可以触发自动补全
+"if has('nvim')
+"	inoremap <silent><expr> <c-space> coc#refresh()
+"else
+"	inoremap <silent><expr> <c-space> coc#refresh()
+"endif
+inoremap <silent><expr> <c-o> coc#refresh()
+
+"
+"使用回车，自动补全后回车换行
+"inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+"                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+"查看上一个或者下一个代码报错
+"nmap <silent> [g <Plug>(coc-diagnostic-prev)
+"nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.查看函数是在哪里定义的
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gy <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
+
+"采用K显示文档
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+	if (index(['vim','help'], &filetype) >= 0)
+		execute 'h '.expand('<cword>')
+	elseif (coc#rpc#ready())
+		call CocActionAsync('doHover')
+	else
+		execute '!' . &keywordprg . " " . expand('<cword>')
+	endif
+endfunction
+
+" Highlight the symbol and its references when holding the
+" cursor.光标放在某个词词上面语法会高亮
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.变量重命名
+ nmap <leader>rn <Plug>(coc-rename)
+
+" " Formatting selected code.
+ xmap <leader>f  <Plug>(coc-format-selected)
+ nmap <leader>f  <Plug>(coc-format-selected)
+ 
+ "# set tags=/home/kingwq/test/projectT/tags
+"tags gutentags SETTING
+" gutentags搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归 "
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.project']
+" " 所生成的数据文件的名称 "
+let g:gutentags_ctags_tagfile = '.tags'
+"同时开启ctags和gtags支持：
+let g:gutentags_modules = []
+if executable('ctags')
+    let g:gutentags_modules += ['ctags']
+endif
+if executable('gtags-cscope') && executable('gtags')
+    let g:gutentags_modules += ['gtags_cscope']
+endif
+
+" 将自动生成的 tags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录 "
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cache_dir = s:vim_tags
+" 检测 ~/.cache/tags 不存在就新建 "
+if !isdirectory(s:vim_tags)
+   silent! call mkdir(s:vim_tags, 'p')
+   endif
+" 配置 ctags 的参数 "
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+pxI']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+"如果使用universal ctags 需要增加下面一行，老的Exuberant-ctags 不能加
+"let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+" 禁用 gutentags 自动加载 gtags 数据库的行为
+let g:gutentags_auto_add_gtags_cscope = 0
+
+"SETTING coc-explorer
+" coc-explorer
+nnoremap <leader>e :CocCommand explorer<CR>
+
+"'skywind3000/asyncrun.vim'
+"自动打开 quickfix window ，高度为 6
+let g:asyncrun_open = 6
+" 任务结束时候响铃提醒
+let g:asyncrun_bell = 1
+let g:asyncrun_rootmarks = ['.svn', '.git', '.root', '_darcs', 'build.xml'] 
+"F4：使用 cmake 生成 Makefile
+"F5：单文件：运行
+"F6：项目：测试
+"F7：项目：编译
+"F8：项目：运行
+"F9：单文件：编译
+"F10：打开/关闭底部的 quickfix 窗口
+nnoremap <silent> <F7> :AsyncRun -cwd=<root> cd build && make <cr>
+nnoremap <silent> <F4> :AsyncRun -cwd=<root> cd build && cmake .. <cr>
+
+nnoremap <F10> :call asyncrun#quickfix_toggle(6)<cr>
+
+"set leaderF
+"查找最近打开的文件（Mru）,使用vim最近打开的文件都会显示于列表中:LeaderfMru
+"nmap <leader>m :LeaderfMru<cr>
+"nmap <leader>F :LeaderfFunction<cr>
+"noremap <leader>t :LeaderfTag<cr>
+"noremap <leader>f :LeaderfFile<cr>
+"noremap <leader>b :LeaderfBuffer<cr>
+"noremap <leader>l :LeaderfLine<cr>
+"
+" don't show the help in normal mode
+let g:Lf_HideHelp = 1
+let g:Lf_UseCache = 0
+let g:Lf_UseVersionControlTool = 0
+let g:Lf_IgnoreCurrentBufferName = 1
+" popup mode
+let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
+let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
+let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+
+let g:Lf_ShortcutF = "<leader>ff"
+noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+
+noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
+noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+" search visually selected text literally
+xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+noremap go :<C-U>Leaderf! rg --recall<CR>
+
+" should use `Leaderf gtags --update` first
+let g:Lf_GtagsAutoGenerate = 0
+let g:Lf_Gtagslabel = 'native-pygments'
+noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
